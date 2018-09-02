@@ -43,8 +43,7 @@ namespace IP_Sender
                 Bot = new TelegramBotClient(config.Token, config.DirectIP,client);
             }else if(config.proxy.User.Empty() && config.proxy.User.Empty())
             {
-
-                httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Password);
+                httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Port);
                 httpClientHandler.UseProxy = true;
                 var client = new HttpClient(httpClientHandler);
                 Bot = new TelegramBotClient(config.Token, config.DirectIP, client);
@@ -52,7 +51,7 @@ namespace IP_Sender
             else
             {
                 ICredentials credentials = new NetworkCredential(config.proxy.User, config.proxy.Password);
-                httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Password, true, null, credentials);
+                httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Port, true, null, credentials);
                 httpClientHandler.UseProxy = true;
                 var client = new HttpClient(httpClientHandler);
                 Bot = new TelegramBotClient(config.Token, config.DirectIP, client);
