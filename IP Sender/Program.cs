@@ -99,7 +99,7 @@ namespace IP_Sender
                 }
                 await Bot.SendTextMessageAsync(message.Chat.Id, ToSend);
             }
-            else if (config.LogFails)
+            else if (msg[0] == config.PCName && config.LogFails)
             {
                 ConsoleColor color = Console.BackgroundColor;
                 Console.BackgroundColor = ConsoleColor.Red;
