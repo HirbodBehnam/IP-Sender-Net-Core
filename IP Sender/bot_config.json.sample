@@ -1,0 +1,14 @@
+{
+  "PCName": "Main",
+  "Token": "BOT_TOKEN",
+  "Password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8 (SHA-256)",
+  "DirectIP": false,
+  "proxy": {
+    "IP": "8.8.8.8",
+    "Port": 8080,
+    "User": "admin",
+    "Password": "password"
+  },
+  "LogFails": true,
+  "LogSends": false
+}
