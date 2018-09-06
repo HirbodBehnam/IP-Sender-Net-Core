@@ -57,7 +57,7 @@ namespace IP_Sender
                 Bot = new TelegramBotClient(config.Token, config.DirectIP, client);
             }
             var me = Bot.GetMeAsync().Result;
-            Console.WriteLine($"[{DateTime.Now}]: Starting @{me.Id} bot. Press enter to stop bot.");
+            Console.WriteLine($"[{DateTime.Now}]: Starting @{me.Username} bot. Press enter to stop bot.");
             Bot.OnMessage += BotOnMessageReceived;
             Bot.StartReceiving();
             Console.ReadLine();
