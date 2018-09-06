@@ -37,7 +37,7 @@ namespace IP_Sender
             var httpClientHandler = new HttpClientHandler();
             if (config.DirectIP)
                 httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
-            if (config.proxy.IP.Empty() && config.proxy.Password.Empty())
+            if (config.proxy == null || (config.proxy.IP.Empty() && config.proxy.Port == 0))
             {
                 var client = new HttpClient(httpClientHandler);
                 Bot = new TelegramBotClient(config.Token, config.DirectIP,client);
