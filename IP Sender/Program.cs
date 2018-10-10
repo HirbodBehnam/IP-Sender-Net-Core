@@ -16,9 +16,66 @@ namespace IP_Sender
         static TelegramBotClient Bot;
         static void Main(string[] args)
         {
-            if(args.Length == 2 && args[0] == "-p")
+            if(args.Length == 2 && args[0] == "--p")
             {
                 Console.WriteLine(SHA256(args[1]));
+                return;
+            }
+            //Configure mode
+            if(args.Length == 1 && args[0] == "-c")
+            {
+                Config config = new Config();
+                Console.Write("Enter bot token: ");
+                config.Token = Console.ReadLine();
+                Console.Write("Enter a name for this computer(DO NOT USE WHITE SPACE): ");
+                config.PCName = Console.ReadLine();
+                Console.Write("Enter a password for this computer: ");
+                config.Password = SHA256(Console.ReadLine());
+                Console.Write("Do you want to use \"Direct IP\"? (y/n): ");
+                config.DirectIP = Console.ReadKey().Key == ConsoleKey.Y;
+                Console.WriteLine();
+                Console.Write("Log login failures? (y/n): ");
+                config.LogFails = Console.ReadKey().Key == ConsoleKey.Y;
+                Console.WriteLine();
+                Console.Write("Log send IPs? (y/n): ");
+                config.LogSends = Console.ReadKey().Key == ConsoleKey.Y;
+                Console.WriteLine();
+                Console.Write("Setup HTTP proxy? (y/n): ");
+                if(Console.ReadKey().Key == ConsoleKey.Y)
+                {
+                    Console.WriteLine();
+                    Config.Proxy p = new Config.Proxy();
+                    Console.Write("Enter proxy IP: ");
+                    p.IP = Console.ReadLine();
+                    p.Port = -1;
+                    do
+                    {
+                        Console.Write("Enter proxy port: ");
+                        try
+                        {
+                            p.Port = Convert.ToInt32(Console.ReadLine());
+                            if (p.Port < 0 || p.Port > 65535)
+                                throw new FormatException("Port must be bigger than zero and less than 65536");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("Please enter a valid port number.");
+                        }
+                    } while (p.Port < 0 || p.Port > 65535);
+                    Console.Write("Setup username and password for this proxy? (y/n): ");
+                    if (Console.ReadKey().Key == ConsoleKey.Y)
+                    {
+                        Console.WriteLine();
+                        Console.Write("Enter proxy username: ");
+                        p.User = Console.ReadLine();
+                        Console.Write("Enter password: ");
+                        p.Password = Console.ReadLine();
+                    }
+                    config.proxy = p;
+                }
+                Console.WriteLine();
+                File.WriteAllText("bot_config.json", JsonConvert.SerializeObject(config));
+                Console.WriteLine("\"bot_config.json\" saved.");
                 return;
             }
             if (!File.Exists("bot_config.json"))
