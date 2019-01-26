@@ -16,7 +16,7 @@ namespace IP_Sender
         static TelegramBotClient Bot;
         static void Main(string[] args)
         {
-            if(args.Length == 2 && args[0] == "--p")
+            if(args.Length == 2 && args[0] == "--p") //Get SHA256
             {
                 Console.WriteLine(SHA256(args[1]));
                 return;
@@ -31,9 +31,6 @@ namespace IP_Sender
                 config.PCName = Console.ReadLine();
                 Console.Write("Enter a password for this computer: ");
                 config.Password = SHA256(Console.ReadLine());
-                Console.Write("Do you want to use \"Direct IP\"? (y/n): ");
-                config.DirectIP = Console.ReadKey().Key == ConsoleKey.Y;
-                Console.WriteLine();
                 Console.Write("Log login failures? (y/n): ");
                 config.LogFails = Console.ReadKey().Key == ConsoleKey.Y;
                 Console.WriteLine();
@@ -92,18 +89,16 @@ namespace IP_Sender
             config.Password = config.Password.ToLower();
             //Now setup bot
             var httpClientHandler = new HttpClientHandler();
-            if (config.DirectIP)
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
             if (config.proxy == null || (config.proxy.IP.Empty() && config.proxy.Port == 0))
             {
                 var client = new HttpClient(httpClientHandler);
-                Bot = new TelegramBotClient(config.Token, config.DirectIP,client);
+                Bot = new TelegramBotClient(config.Token);
             }else if(config.proxy.User.Empty() && config.proxy.User.Empty())
             {
                 httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Port);
                 httpClientHandler.UseProxy = true;
                 var client = new HttpClient(httpClientHandler);
-                Bot = new TelegramBotClient(config.Token, config.DirectIP, client);
+                Bot = new TelegramBotClient(config.Token);
             }
             else
             {
@@ -111,7 +106,7 @@ namespace IP_Sender
                 httpClientHandler.Proxy = new WebProxy(config.proxy.IP + ":" + config.proxy.Port, true, null, credentials);
                 httpClientHandler.UseProxy = true;
                 var client = new HttpClient(httpClientHandler);
-                Bot = new TelegramBotClient(config.Token, config.DirectIP, client);
+                Bot = new TelegramBotClient(config.Token);
             }
             var me = Bot.GetMeAsync().Result;
             Console.WriteLine($"[{DateTime.Now}]: Starting @{me.Username} bot. Press enter to stop bot.");
